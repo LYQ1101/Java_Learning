@@ -4,6 +4,5 @@ public class App {
 //        LoginJFrame loginbox=new LoginJFrame();
 //        RegisterJFrame register=new RegisterJFrame();
 
-
     }
 }
