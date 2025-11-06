@@ -359,4 +359,33 @@ public class ButtonTest {
 
 ### 1.单列集合顶层接口collection：相关方法的用法
 
-#### 其中的.contains是用equal比较地址值来判断是否存在的
+#### 其中的.contains是用equal比较地址值来判断是否存在的；利用迭代器Iterarater来遍历集合；利用增强for来遍历单列集合；List集合就是collection集合的一个子类继承。
+
+### 3.双列集合Map：键和值一一对应；相关方法的用法
+
+遍历方法
+
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("A", 1);
+map.put("B", 2);
+map.put("C", 3);
+
+// 方式一：使用 for-each 循环遍历 entrySet（最推荐）
+for (Map.Entry<String, Integer> entry : map.entrySet()) //增强for，每次创建
+//一个键值对对象接收集合元素,map.entrySet()可以遍历整个集合并且返回
+{
+    String key = entry.getKey();     // 直接获取 Key
+    Integer value = entry.getValue(); // 直接获取 Value
+    System.out.println("Key: " + key + ", Value: " + value);
+}
+```
+
+```java
+// 方式二：使用 for-each 循环遍历 keySet
+for (String key : map.keySet()) {
+    // 每次迭代都需要调用 map.get(key) 来查找 Value
+    Integer value = map.get(key); 
+    System.out.println("Key: " + key + ", Value: " + value);
+}
+```
