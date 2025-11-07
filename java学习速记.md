@@ -352,3 +352,63 @@ public class ButtonTest {
 ```
 
 #### 总之：当您需要创建一个类的实例，而这个类**只需要使用一次**，并且它的代码量**很少**时，就应该考虑使用匿名内部类。匿名内部类是 Java 中实现**一次性、局部化、小规模功能**的首选工具，它用简洁的语法解决了传统上需要创建多个文件的麻烦。
+
+## 
+
+## 二、集合进阶
+
+### 1.单列集合顶层接口collection：相关方法的用法
+
+#### 其中的.contains是用equal比较地址值来判断是否存在的；利用迭代器Iterarater来遍历集合；利用增强for来遍历单列集合；List集合就是collection集合的一个子类继承。
+
+### 3.双列集合Map：键和值一一对应；相关方法的用法
+
+遍历方法
+
+```java
+Map<String, Integer> map = new HashMap<>();
+map.put("A", 1);
+map.put("B", 2);
+map.put("C", 3);
+
+// 方式一：使用 for-each 循环遍历 entrySet（最推荐）
+for (Map.Entry<String, Integer> entry : map.entrySet()) //增强for，每次创建
+//一个键值对对象接收集合元素,map.entrySet()可以遍历整个集合并且返回
+{
+    String key = entry.getKey();     // 直接获取 Key
+    Integer value = entry.getValue(); // 直接获取 Value
+    System.out.println("Key: " + key + ", Value: " + value);
+}
+```
+
+```java
+// 方式二：使用 for-each 循环遍历 keySet
+for (String key : map.keySet()) {
+    // 每次迭代都需要调用 map.get(key) 来查找 Value
+    Integer value = map.get(key); 
+    System.out.println("Key: " + key + ", Value: " + value);
+}
+```
+
+#### HashMap(重要)，LinkedMap，TreeMap
+
+#### 集合类Collection
+
+#### 
+
+#### 一点迭代器、比较器的补充和例子
+
+```java
+    public void order(ArrayList<String > list)
+    {
+        Collections.sort(list, new Comparator<String>() {   //比较器用法
+            @Override
+            public int compare(String o1, String o2) {
+                int value1=getValue(o1);    //这里获取了o1的值
+                int value2=getValue(o2);
+                int i=value1-value2;    //升序排序，返回负数时候v1排在v2前面，反之后面
+                return i==0?0:i;
+            }
+        });
+    }
+```
