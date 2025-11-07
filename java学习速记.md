@@ -412,3 +412,104 @@ for (String key : map.keySet()) {
         });
     }
 ```
+
+
+
+## 三、Lambda表达式
+
+Lambda 表达式本质上是一个**匿名函数**（没有名称的函数）。
+
+它的主要目的是**简化对函数式接口（Functional Interface）的实现**，用更紧凑的语法取代冗长的**匿名内部类**（Anonymous Inner Class）。
+
+一个 Lambda 表达式由三个主要部分组成：
+
+                        （参数列表）->  表达式/结构体
+
+| **参数列表**             | 定义函数的输入参数。       | `(a, b)`，`s`，`()`               |
+| -------------------- | ---------------- | ------------------------------- |
+| **箭头** $\rightarrow$ | 将参数列表与函数体分隔开。    | `->`                            |
+| **函数体**              | 定义函数要执行的操作或返回的值。 | `a + b`，`System.out.println(s)` |
+
+Lambda 表达式并不是随便可以写的，它必须用于实现一个**函数式接口**。任何**只包含一个抽象方法**的接口，都可以被称为函数式接口。
+
+**Lambda 最主要的使用场景就是作为方法参数传入，尤其是在 Stream API 中。代替匿名内部类**，如：
+
+```java
+// 传统匿名内部类实现 Runnable 接口
+Thread t1 = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("传统方式启动线程");
+    }
+});
+
+// 使用 Lambda 表达式实现 Runnable 接口 (Runnable 是一个函数式接口)，空参->表达式
+Thread t2 = new Thread(() -> System.out.println("Lambda 方式启动线程"));
+
+t2.start();
+```
+
+
+
+## 四、stream流
+
+### 1.单列集合，双列集合，数组，零散数据调用stream流方法是不一样的
+
+```java
+//单列集合    直接用Collections中的stream    链式编程写法
+scores.stream() // 1. 创建 Stream
+              .filter(s -> s >= 80) // 2. 中间操作：过滤掉小于 80 的元素
+              .forEach(s -> System.out.println("及格分数: " + s)); // 3. 终端操作：打印结果
+
+//双列集合    必须对值或键操作
+countryMap.entrySet().stream() // 1. 创建 Stream：Stream 里的元素是 Map.Entry<String, String>
+                  .filter(entry -> entry.getValue().length() > 3) // 2. 过滤：首都（Value）长度大于 3
+                  .forEach(entry -> { // 3. 打印：使用 entry.getKey() 和 entry.getValue() 
+                      System.out.println("国家: " + entry.getKey() + ", 首都: " + entry.getValue());
+
+//数组    Arrays调用
+Arrays.stream(fruits) // 1. 创建 Stream
+              .filter(f -> f.startsWith("A")) // 2. 过滤：以 'A' 开头
+              .forEach(f -> System.out.println("A-开头水果: " + f)); // 3. 打印
+
+
+//零散数据 of
+Stream.of("Java", "C", "Python", "Go", "Ruby") // 1. 创建 Stream
+              .filter(lang -> lang.length() >= 4) // 2. 过滤：长度大于等于 4
+              .forEach(lang -> System.out.println("长于 4 的语言: " + lang)); // 3. 打印
+```
+
+```java
+//匿名内部类写法
+        list.stream().forEach(new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+                System.out.print(s);
+            }
+       });
+```
+
+
+
+### 2.stream流中常用的中间方法
+
+| **场景**  | **传统完整写法**                                         | **Lambda 简化写法**                                    | **解释**                                          |
+| ------- | -------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| **无参数** | `() -> { System.out.println("Hello"); }`           | `() -> System.out.println("Hello")`                | 必须保留空括号 `()`。                                   |
+| **单参数** | `(s) -> { System.out.println(s); }`                | `s -> System.out.println(s)`                       | **可以省略参数的类型和外层的括号 `()`。**                       |
+| **多参数** | `(x, y) -> { return x + y; }`                      | `(x, y) -> x + y`                                  | **多参数时，参数外的括号 `()` 不能省略。**                      |
+| **单行体** | `(x) -> { return x * x; }`                         | `x -> x * x`                                       | **如果函数体只有一行返回语句，可以省略 `{}` 和 `return` 关键字。**     |
+| **多行体** | `(s) -> { int len = s.length(); return len > 5; }` | `(s) -> { int len = s.length(); return len > 5; }` | **多行语句时，必须使用 `{}` 包裹，并使用 `return` 返回（如果有返回值）。** |
+
+### 3.stream流中常用的终结方法
+
+| **类别**                  | **方法**                                    | **目的/用途**                                              | **返回值类型**                              |
+| ----------------------- | ----------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| **收集/转换 (Collector)**   | **`collect(Collector)`**                  | 将 Stream 中的元素汇集成一个**新的集合**（List, Set, Map）或一个**单一结果**。 | `List<T>`, `Set<T>`, `Map<K, V>` 或其它类型 |
+| **遍历/消耗 (Consumption)** | **`forEach(Consumer)`**                   | 对 Stream 中的每个元素执行一个**动作**。                             | `void`                                 |
+| **统计/聚合 (Reduction)**   | **`count()`**                             | 返回 Stream 中的元素总数。                                      | `long`                                 |
+|                         | **`max(Comparator)` / `min(Comparator)`** | 找出 Stream 中的最大或最小元素。                                   | `Optional<T>`                          |
+|                         | **`reduce(BinaryOperator)`**              | 通过重复应用一个操作，将所有元素**归约为一个单一结果**。                         | `Optional<T>` 或 `T`                    |
+| **查找/匹配 (Matching)**    | **`anyMatch(Predicate)`**                 | 检查 Stream 中**是否有**元素匹配给定条件。                            | `boolean`                              |
+|                         | **`allMatch(Predicate)`**                 | 检查 Stream 中**所有**元素是否都匹配给定条件。                          | `boolean`                              |
+|                         | **`findFirst()` / `findAny()`**           | 找出 Stream 中的**第一个**或**任意一个**元素。                        | `Optional<T>`                          |
