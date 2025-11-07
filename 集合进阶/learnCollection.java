@@ -53,5 +53,7 @@ public class learnCollection {
             String value=m.get(key);
             System.out.printf(value);
         }
+
+        System.out.print(m);    //集合是可以直接打印的
     }
 }

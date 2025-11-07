@@ -389,3 +389,26 @@ for (String key : map.keySet()) {
     System.out.println("Key: " + key + ", Value: " + value);
 }
 ```
+
+#### HashMap(重要)，LinkedMap，TreeMap
+
+#### 集合类Collection
+
+#### 
+
+#### 一点迭代器、比较器的补充和例子
+
+```java
+    public void order(ArrayList<String > list)
+    {
+        Collections.sort(list, new Comparator<String>() {   //比较器用法
+            @Override
+            public int compare(String o1, String o2) {
+                int value1=getValue(o1);    //这里获取了o1的值
+                int value2=getValue(o2);
+                int i=value1-value2;    //升序排序，返回负数时候v1排在v2前面，反之后面
+                return i==0?0:i;
+            }
+        });
+    }
+```
