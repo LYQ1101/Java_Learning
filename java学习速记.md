@@ -449,8 +449,6 @@ Thread t2 = new Thread(() -> System.out.println("Lambda 方式启动线程"));
 t2.start();
 ```
 
-
-
 ## 四、stream流
 
 ### 1.单列集合，双列集合，数组，零散数据调用stream流方法是不一样的
@@ -514,8 +512,6 @@ Stream.of("Java", "C", "Python", "Go", "Ruby") // 1. 创建 Stream
 |                         | **`allMatch(Predicate)`**                 | 检查 Stream 中**所有**元素是否都匹配给定条件。                          | `boolean`                              |
 |                         | **`findFirst()` / `findAny()`**           | 找出 Stream 中的**第一个**或**任意一个**元素。                        | `Optional<T>`                          |
 
-
-
 ## 五、方法引用
 
 ### 1.一句话总结：把已有的方法拿过来用，当作函数接口中抽象方法的方法体。(似乎比lambda表达式的简化形式还要简化)
@@ -573,16 +569,23 @@ Consumer<String> consumerRef = printer::print;
 
 //2.任意对象    Lambda 表达式的**第一个参数**作为方法的调用者。
 List<String> words = Arrays.asList("Apple", "Banana", "Cat", "Dog", "Elephant");
-        
+
         // 1. 使用 Lambda 表达式实现按长度比较
         words.sort((s1, s2) -> Integer.compare(s1.length(), s2.length()));
         // 输出: [Cat, Dog, Apple, Banana, Elephant]
-        
+
         // 2. 使用类的任意对象实例方法引用：String::compareTo
         // -----------------------------------------------------------
         // 假设我们想按字典顺序不区分大小写排序
         // Comparator<String> 的 compare 方法需要 (String o1, String o2) 两个参数
-        
+
         words.sort(String::compareToIgnoreCase); 
         // 效果：(String s1, String s2) -> s1.compareToIgnoreCase(s2)
+```
+
+小练习
+
+```java
+//Student中已重写相关方法和定义getName
+
 ```
