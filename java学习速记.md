@@ -512,6 +512,8 @@ Stream.of("Java", "C", "Python", "Go", "Ruby") // 1. 创建 Stream
 |                         | **`allMatch(Predicate)`**                 | 检查 Stream 中**所有**元素是否都匹配给定条件。                          | `boolean`                              |
 |                         | **`findFirst()` / `findAny()`**           | 找出 Stream 中的**第一个**或**任意一个**元素。                        | `Optional<T>`                          |
 
+## 
+
 ## 五、方法引用
 
 ### 1.一句话总结：把已有的方法拿过来用，当作函数接口中抽象方法的方法体。(似乎比lambda表达式的简化形式还要简化)
@@ -603,3 +605,29 @@ public class Test2 {
     }
 }
 ```
+
+
+
+## 六、异常
+
+### 1.异常体系中最上层的父类是Exception，分为编译时异常和运行时异常。
+
+### 2.捕获异常：①try{ 可能出现异常的代码 }catch(异常类名 变量名){  异常的处理代码  }
+
+```java
+        int[]arr={1,2,3};
+        try {
+            System.out.print(arr[4]);//如果出现异常，程序就会在这创建一个ArrayIndexOutOfBoundsException 对象
+        //拿着这个对象和catch里面的对象比较，如果能被接收就表示能被捕获
+        //执行catch里面对应的代码
+        }
+        catch (ArrayIndexOutOfBoundsException e)//数组索引越界类
+        {
+            System.out.printf("数组索引越界了\n");
+        }
+        System.out.printf("检测是否走到这一步");
+```
+
+
+
+### 
