@@ -628,6 +628,14 @@ public class Test2 {
         System.out.printf("检测是否走到这一步");
 ```
 
+### 3.异常常用的几种类方法：
+
+```java
+getMessage()        将此异常的详细信息作为一个字符串返回
+toString()            将此异常的简短信息作为一个字符串返回
+printStackTrace()    把异常的错误信息输出在控制台，包含信息最多
+```
+
 
 
 ### 
