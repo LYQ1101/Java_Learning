@@ -512,6 +512,8 @@ Stream.of("Java", "C", "Python", "Go", "Ruby") // 1. 创建 Stream
 |                         | **`allMatch(Predicate)`**                 | 检查 Stream 中**所有**元素是否都匹配给定条件。                          | `boolean`                              |
 |                         | **`findFirst()` / `findAny()`**           | 找出 Stream 中的**第一个**或**任意一个**元素。                        | `Optional<T>`                          |
 
+## 
+
 ## 五、方法引用
 
 ### 1.一句话总结：把已有的方法拿过来用，当作函数接口中抽象方法的方法体。(似乎比lambda表达式的简化形式还要简化)
@@ -600,6 +602,116 @@ public class Test2 {
                 .map(Student::getName).toArray(String[]::new);
                 //此处map中getName得到的是一堆String的，所以toArray要转成String类型的数组，接收那也要该
         Arrays.stream(stu_name).forEach(System.out::print);
+    }
+}
+```
+
+## 六、异常
+
+### 1.异常体系中最上层的父类是Exception，分为编译时异常和运行时异常。
+
+### 2.捕获异常：①try{ 可能出现异常的代码 }catch(异常类名 变量名){  异常的处理代码  }
+
+```java
+        int[]arr={1,2,3};
+        try {
+            System.out.print(arr[4]);//如果出现异常，程序就会在这创建一个ArrayIndexOutOfBoundsException 对象
+        //拿着这个对象和catch里面的对象比较，如果能被接收就表示能被捕获
+        //执行catch里面对应的代码
+        }
+        catch (ArrayIndexOutOfBoundsException e)//数组索引越界类
+        {
+            System.out.printf("数组索引越界了\n");
+        }
+        System.out.printf("检测是否走到这一步");
+```
+
+### 3.异常常用的几种类方法：
+
+```java
+getMessage()        将此异常的详细信息作为一个字符串返回
+toString()            将此异常的简短信息作为一个字符串返回
+printStackTrace()    把异常的错误信息输出在控制台，包含信息最多
+```
+
+## 4.抛出异常
+
+![](C:\Users\lyq\AppData\Roaming\marktext\images\2025-11-09-19-25-02-image.png)
+
+```java
+    public static int getOne(int[] arr) throws NegativeArraySizeException,NullPointerException
+    {
+        if(arr==null)
+            //手动创建一个异常对象，并把这个异常方法交给调用者处理，后面的代码不会再执行了
+            throw new RuntimeException();
+        return arr[0];
+    }
+```
+
+注：使用：throw new RuntimeException();可以直接抛出异常，不用再描述异常的具体种类，就单单表示出现了异常
+
+连起来：在try中执行的代码块抛出某个类型的异常的时候（throw 。。。）,在对应的catch括号的异常类型（对应throw后的异常类型）对应的执行代码块中就可以对这个异常进行处理。
+
+一个自定义异常和前面的综合小例子：
+
+```java
+public class InsufficientFundsException extends Exception {
+    //Exception类中有message属性还有getMessage方法
+    // 建议：添加一个带字符串参数的构造方法
+    // 这个参数 (message) 将作为异常的详细描述
+    public InsufficientFundsException(String message) {
+        // 调用父类 Exception 的构造方法
+        // 从而将 message 存储在异常对象中
+        super(message);
+    }
+}
+
+
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    // 重点：方法签名上必须声明 'throws InsufficientFundsException'
+    public void withdraw(double amount) throws InsufficientFundsException {
+        if (amount > balance) {
+            // 抛出我们自定义的异常，并附带详细信息
+            double needed = amount - balance;
+            String message = "取款失败：余额不足。需要 $" + needed + " 才能完成取款 $" + amount + "。";
+
+            throw new InsufficientFundsException(message);
+        }
+
+        balance -= amount;
+        System.out.println("成功取出 $" + amount + "。当前余额: $" + balance);
+    }
+}```
+```
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount(500.00); // 初始余额 $500
+
+        try {
+            System.out.println("尝试取款 $300...");
+            account.withdraw(300.00); // 第一次：成功
+
+            System.out.println("\n尝试取款 $400...");
+            account.withdraw(400.00); // 第二次：余额不足，抛出异常
+
+            // 如果成功，会执行下面的代码
+            System.out.println("这一行不会被执行到，因为异常已抛出。");
+
+        } catch (InsufficientFundsException e) {
+            // 捕获并处理自定义异常
+            System.err.println("\n[异常捕获] 错误信息:");
+            System.err.println(e.getMessage());
+
+            // e.printStackTrace(); 打印完整的堆栈信息
+        }
     }
 }
 ```
