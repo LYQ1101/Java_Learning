@@ -722,6 +722,103 @@ public class Main {
 
 ## 七、文件
 
-### 1.file类，熟悉其中的相关方法
+###### A、创建 `File` 对象（文件路径的抽象表示）
 
-比较重要的有listFiles
+创建 `File` 对象只是在内存中表示一个路径，并不会立即在文件系统上创建实际的文件或目录。
+
+#### 1. 构造方法与语法
+
+| **构造方法**                                    | **示例**                                                                      | **说明**                 |
+| ------------------------------------------- | --------------------------------------------------------------------------- | ---------------------- |
+| **`new File(String pathname)`**             | `File f1 = new File("c:/data/test.txt");`                                   | 使用一个字符串作为文件或目录的完整路径。   |
+| **`new File(String parent, String child)`** | `File f2 = new File("c:/data", "test.txt");`                                | 将父路径和子路径分开传入，更灵活。      |
+| **`new File(File parent, String child)`**   | `File dir = new File("c:/data");`<br>`File f3 = new File(dir, "test.txt");` | 使用已存在的 `File` 对象作为父目录。 |
+
+#### 2. 注意事项
+
+- **路径分隔符：** 推荐使用 `/` (正斜杠) 或 `\\` (双反斜杠) 来确保跨平台兼容性。
+
+- **绝对路径 vs 相对路径：** 相对路径是相对于当前程序运行目录而言的。
+
+---
+
+### B、基本文件/目录操作
+
+这些方法用于在文件系统中创建、删除和重命名实际的物理文件或目录。
+
+| **方法**                            | **返回值**        | **作用和语法**                                            |
+| --------------------------------- | -------------- | ---------------------------------------------------- |
+| **`boolean mkdir()`**             | `true`/`false` | 创建由该对象表示的**单个**目录。**父目录必须已存在**。                      |
+| **`boolean mkdirs()`**            | `true`/`false` | 创建由该对象表示的目录，**包括所有必需但不存在的父目录**。**（推荐使用）**            |
+| **`boolean createNewFile()`**     | `true`/`false` | 创建一个新的空文件。如果文件已存在，返回 `false`。**需要处理 `IOException`。** |
+| **`boolean delete()`**            | `true`/`false` | 删除此对象表示的文件或空目录。非空目录无法删除。                             |
+| **`boolean renameTo(File dest)`** | `true`/`false` | 将文件或目录重命名或移动到 `dest` 指定的新位置。                         |
+
+#### 实例代码（创建目录）
+
+Java
+
+```
+import java.io.File;
+
+// 创建多级目录（推荐）
+File dir = new File("D:/my_notes/java_io/files"); 
+if (dir.mkdirs()) {
+    System.out.println("目录创建成功!");
+}
+```
+
+---
+
+### C、查询文件/目录属性
+
+这些方法用于检查文件或目录的状态和元信息。
+
+| **方法**                         | **返回值**        | **作用**                       | **示例**                         |
+| ------------------------------ | -------------- | ---------------------------- | ------------------------------ |
+| **`boolean exists()`**         | `true`/`false` | 测试此路径表示的文件或目录是否**实际存在**。     | `if (f.exists()) { ... }`      |
+| **`boolean isFile()`**         | `true`/`false` | 测试此路径是否为**文件**。              | `if (f.isFile()) { ... }`      |
+| **`boolean isDirectory()`**    | `true`/`false` | 测试此路径是否为**目录**。              | `if (f.isDirectory()) { ... }` |
+| **`String getName()`**         | `String`       | 返回文件或目录的**名称**（路径的最后一部分）。    | `f.getName()` // "test.txt"    |
+| **`String getPath()`**         | `String`       | 返回创建 `File` 对象时使用的**路径字符串**。 |                                |
+| **`String getAbsolutePath()`** | `String`       | 返回文件或目录的**绝对路径**。            |                                |
+| **`long length()`**            | `long`         | 返回文件的**字节大小**。如果是目录，结果是不确定的。 |                                |
+
+---
+
+### D、列出目录内容
+
+这些方法用于获取一个目录下的文件和子目录列表。
+
+| **方法**                   | **返回值**    | **作用**                                           |
+| ------------------------ | ---------- | ------------------------------------------------ |
+| **`String[] list()`**    | `String[]` | 返回目录中文件和目录的**名称**数组（`String` 类型）。                |
+| **`File[] listFiles()`** | `File[]`   | 返回目录中文件和目录的**`File` 对象**数组（`File` 类型）。**（推荐使用）** |
+
+#### 实例代码（遍历目录）
+
+Java
+
+```
+import java.io.File;
+
+File dir = new File("c:/MyData");
+// 推荐使用 listFiles() 获取 File 对象
+File[] items = dir.listFiles(); 
+
+if (items != null) {
+    for (File item : items) {
+        if (item.isDirectory()) {
+            System.out.println("[目录]: " + item.getName());
+        } else if (item.isFile()) {
+            System.out.println("[文件]: " + item.getName() + " (" + item.length() + " 字节)");
+        }
+    }
+}
+```
+
+---
+
+### 总结
+
+`File` 类是进行任何文件读写操作（使用 `FileInputStream`/`FileOutputStream` 等流）的**基础**。掌握它的基本构造和操作方法，是进行 Java I/O 编程的第一步。
