@@ -3,13 +3,14 @@ import java.io.IOException;
 
 public class MyFile {
     public static void main(String[] args) throws IOException {
-        File file=new File("mhyfile\\aaa");
+        File file=new File("mhyfile/bbb");
 
-        file.mkdirs();
+        boolean a=file.mkdir();
+        System.out.print(a);
 
         File src=new File(file,"1.txt");
 
-        src.createNewFile();
+//        file.createNewFile();
     }
 
 
