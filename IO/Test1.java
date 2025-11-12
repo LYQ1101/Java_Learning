@@ -10,7 +10,7 @@ public class Test1 {
         byte [] m={77,78,79,80};
         fo.write(m,1,2);
 
-        FileInputStream input=new FileInputStream("test01");
+        FileInputStream input=new FileInputStream("test012");
         int b;
         while((b=input.read())!=-1){
             System.out.print((char)b+"\n");
