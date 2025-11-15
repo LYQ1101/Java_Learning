@@ -1,7 +1,8 @@
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-
+//字符流   能帮你做完“字符串 → 指定编码字节”的转换；
 public class Test2 {
     public static void main(String[] args) throws IOException {
 
@@ -21,6 +22,12 @@ public class Test2 {
             System.out.print(new String(a,0,m));
         }
 
+        FileWriter in=new FileWriter("test01.txt");
+        in.write("你好");
+        char [] input1={'你','是'};
+        in.write(input1);
+
         fil.close();
+        in.close();
     }
 }
