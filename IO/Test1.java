@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+//字节流：文件直接读取字节，不进行编码转换
 public class Test1 {
     public static void main(String[] args) throws IOException {
         FileOutputStream fo=new FileOutputStream("test01");
