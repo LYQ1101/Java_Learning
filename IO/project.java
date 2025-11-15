@@ -24,7 +24,7 @@ public class project {
         int jiemi;
         int j=0;
         FileInputStream in2=new FileInputStream("jiami_test01.txt");
-        FileOutputStream out2=new FileOutputStream("jiemi_test01.txt");
+        FileOutputStream out2=new FileOutputStream("jiami_test01.txt");
         while((jiemi=in2.read())!=-1){
             out2.write((char)jiemi^j);
             j+=1;
