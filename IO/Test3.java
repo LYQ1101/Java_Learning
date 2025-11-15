@@ -38,8 +38,14 @@ public class Test3 {
             out2.write(line);
             out2.newLine(); //跨平台的换行
         }
-
         out2.close();
-        in2.close();
+        in2.close();    //缓冲流要写入文件一定得关闭，不然数据就在缓冲区
+
+        BufferedWriter a1=new BufferedWriter(new FileWriter("test02.txt"));
+        a1.write("请问你是谁");  //此步骤只是写入缓冲区，要写入文件一定要关闭！！！
+
+        a1.close(); //关键！！！
+
+
     }
 }
