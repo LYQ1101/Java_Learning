@@ -847,6 +847,16 @@ if (items != null) {
 
 
 
+
+
 ## 九、多线程
 
 ### 1.创建进程的三种方式
+
+### 2.线程中常见的方法
+
+### 3.同步代码块    小tips:StringBuffer相较于StringBuilder的一个很大区别就是前者的每个方法都有synchronized
+
+
+
+## 十、网路编程
